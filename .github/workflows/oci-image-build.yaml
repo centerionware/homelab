@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ciw-gh-runners
+    runs-on: homelab-runners
     timeout-minutes: 10
     
     # The 'outputs' block is used to expose information from this job to
