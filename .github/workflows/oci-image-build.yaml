@@ -1,0 +1,85 @@
+# This workflow builds and publishes a multi-architecture Docker image.
+# It is specifically designed to run on a Kubernetes cluster with a
+# self-hosted runner, bypassing the need for a local Docker daemon
+# or a Docker-in-Docker (dind) sidecar.
+name: Build and Publish Multi-Arch Docker Image
+
+on:
+  push:
+    branches:
+      - '**'
+
+# Give the workflow permissions to write to the GitHub Packages registry.
+# This is necessary for pushing the image to ghcr.io.
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ciw-gh-runners
+    timeout-minutes: 10
+    
+    # The 'outputs' block is used to expose information from this job to
+    # other jobs in the workflow, if needed. This replicates the output
+    # of the original workflow's 'build' job.
+    outputs:
+      image-uri: ghcr.io/${{ github.repository }}@${{ steps.build-and-push.outputs.digest }}
+    
+    steps:
+      # Step 1: Check out the repository code.
+      # This is the starting point for all builds.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Log in to the GitHub Container registry (ghcr.io).
+      # This step authenticates the workflow so it can push the final image.
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      # Step 3: Set up Docker Buildx with the Kubernetes driver.
+      # This creates a BuildKit pod on the cluster to perform the build,
+      # which should handle all multi-architecture dependencies itself,
+      # including QEMU.
+      - name: Set up Docker Buildx with Kubernetes driver
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver: kubernetes
+          # The 'driver-opts' can be used to configure the BuildKit pod.
+          # Here, we set the namespace where the pod will be created.
+          driver-opts: |
+            namespace=buildkit
+          use: true
+          buildkitd-config-inline: |
+            [registry."docker.io"]
+              mirrors = ["http://spegel-registry.spegel.svc.cluster.local"]
+      
+      # Step 4: Extract metadata for Docker image tagging.
+      # This step generates dynamic tags and labels based on the Git context,
+      # which is then used by the build step.
+      - name: Extract metadata (tags, labels) for Docker
+        id: metadata
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+
+      # Step 5: Build and push the multi-architecture image.
+      # This single step performs the build, creates the multi-platform manifest,
+      # and pushes everything to the registry. The 'tags' and 'labels' are
+      # supplied from the metadata step. Caching is also configured here.
+      - name: Build and push multi-arch image
+        id: build-and-push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}
+          # Use GitHub Actions as a cache backend for faster builds.
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
