@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: homelab-runners
+    runs-on: ciw-gh-homelab-runners
     # runs-on: ubuntu-latest
     timeout-minutes: 10
     
