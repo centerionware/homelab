@@ -1,51 +1,39 @@
-# ============================================================
-# Stage 1: Build vLLM from source with CUDA 11.8
-# ============================================================
 FROM nvidia/cuda:11.8.0-devel-ubuntu22.04 AS builder
 
 # System dependencies
 RUN apt-get update && apt-get install -y \
-    git \
-    build-essential \
-    python3 \
-    python3-dev \
-    python3-pip \
-    python3-venv \
-    wget \
-    curl \
-    cmake \
-    ninja-build \
+    git build-essential python3 python3-dev python3-pip python3-venv \
+    wget curl cmake ninja-build \
     && rm -rf /var/lib/apt/lists/*
 
-# Create a working directory
 WORKDIR /workspace
-
-# Clone vLLM repo
 RUN git clone https://github.com/vllm-project/vllm.git
 WORKDIR /workspace/vllm
 
-# Apply modifications for CUDA 11.8
-# 1. Remove pyproject.toml to avoid enforcing torch/xformers
+# Remove pyproject.toml (forces it to use setup.py path)
 RUN rm -f pyproject.toml
 
-# 2. Change setup.py to force CUDA 11.8
+# Force CUDA 11.8 in setup.py
 RUN sed -i 's/^MAIN_CUDA_VERSION.*/MAIN_CUDA_VERSION = "11.8"/' setup.py
 
-# 3. Remove torch & xformers from requirements
-RUN sed -i '/torch/d' requirements.txt && sed -i '/xformers/d' requirements.txt
-
-# Install Python deps
+# Upgrade pip & basics
 RUN pip install --upgrade pip setuptools wheel packaging
 
-# Install PyTorch for CUDA 11.8
+# Install PyTorch (CUDA 11.8 wheels)
 RUN pip install torch==2.2.2+cu118 torchvision==0.17.2+cu118 torchaudio==2.2.2+cu118 \
     --index-url https://download.pytorch.org/whl/cu118
 
-# Install xformers for CUDA 11.8
+# Install xformers (CUDA 11.8 build)
 RUN pip install -U xformers --index-url https://download.pytorch.org/whl/cu118
 
-# Install vLLM from source
-RUN pip install -e .
+# Tell vLLM we are bringing our own torch
+RUN python3 use_existing_torch.py
+
+# Install build requirements
+RUN pip install -r requirements/build.txt
+
+# Build and install vLLM from source
+RUN pip install --no-build-isolation -e .
 
 # ============================================================
 # Stage 2: Runtime Image
