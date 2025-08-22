@@ -19,7 +19,6 @@ jobs:
   build:
     runs-on: ciw-gh-homelab-runners
     # runs-on: ubuntu-latest
-    timeout-minutes: 10
     
     # The 'outputs' block is used to expose information from this job to
     # other jobs in the workflow, if needed. This replicates the output
