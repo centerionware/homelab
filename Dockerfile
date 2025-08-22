@@ -1,6 +1,5 @@
 FROM nvidia/cuda:11.8.0-devel-ubuntu22.04 AS builder
 
-# System dependencies
 RUN apt-get update && apt-get install -y \
     git build-essential python3 python3-dev python3-pip python3-venv \
     wget curl cmake ninja-build \
@@ -10,23 +9,17 @@ WORKDIR /workspace
 RUN git clone https://github.com/vllm-project/vllm.git
 WORKDIR /workspace/vllm
 
-# Remove pyproject.toml (forces it to use setup.py path)
-RUN rm -f pyproject.toml
-
-# Force CUDA 11.8 in setup.py
-RUN sed -i 's/^MAIN_CUDA_VERSION.*/MAIN_CUDA_VERSION = "11.8"/' setup.py
-
 # Upgrade pip & basics
 RUN pip install --upgrade pip setuptools wheel packaging
 
-# Install PyTorch (CUDA 11.8 wheels)
+# Install PyTorch stack (CUDA 11.8)
 RUN pip install torch==2.2.2+cu118 torchvision==0.17.2+cu118 torchaudio==2.2.2+cu118 \
     --index-url https://download.pytorch.org/whl/cu118
 
-# Install xformers (CUDA 11.8 build)
-RUN pip install -U xformers --index-url https://download.pytorch.org/whl/cu118
+# Install matching xformers
+RUN pip install xformers==0.0.25.post1 --index-url https://download.pytorch.org/whl/cu118
 
-# Tell vLLM we are bringing our own torch
+# Tell vLLM to clean requirements to use our installed torch
 RUN python3 use_existing_torch.py
 
 # Install build requirements
