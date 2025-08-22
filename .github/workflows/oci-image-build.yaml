@@ -17,8 +17,8 @@ permissions:
 
 jobs:
   build:
-    # runs-on: homelab-runners
-    runs-on: ubuntu-latest
+    runs-on: homelab-runners
+    # runs-on: ubuntu-latest
     timeout-minutes: 10
     
     # The 'outputs' block is used to expose information from this job to
@@ -48,16 +48,16 @@ jobs:
       # including QEMU.
       - name: Set up Docker Buildx with Kubernetes driver
         uses: docker/setup-buildx-action@v3
-        # with:
-        #   driver: kubernetes
-        #   # The 'driver-opts' can be used to configure the BuildKit pod.
-        #   # Here, we set the namespace where the pod will be created.
-        #   driver-opts: |
-        #     namespace=buildkit
-        #   use: true
-        #   buildkitd-config-inline: |
-        #     [registry."docker.io"]
-        #       mirrors = ["http://spegel-registry.spegel.svc.cluster.local"]
+        with:
+          driver: kubernetes
+          # The 'driver-opts' can be used to configure the BuildKit pod.
+          # Here, we set the namespace where the pod will be created.
+          driver-opts: |
+            namespace=buildkit
+          use: true
+          buildkitd-config-inline: |
+            [registry."docker.io"]
+              mirrors = ["http://spegel-registry.spegel.svc.cluster.local"]
       
       # Step 4: Extract metadata for Docker image tagging.
       # This step generates dynamic tags and labels based on the Git context,
