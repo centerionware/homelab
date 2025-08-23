@@ -45,7 +45,9 @@ jobs:
           use: true
           buildkitd-config-inline: |
             [registry."docker.io"]
-              mirrors = ["http://spegel-registry.spegel.svc.cluster.local"]
+              mirrors = ["https://harbor.centerionware.com/v2/dockerhub"]
+            [registry."ghcr.io"]
+              mirrors = ["https://harbor.centerionware.com/v2/github"]
 
       - name: Extract metadata (tags, labels) for Docker
         id: metadata
