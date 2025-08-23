@@ -63,5 +63,5 @@ jobs:
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
           # Use Harbor as a cache backend
-          cache-from: type=registry,ref=harbor.centerionware.com/${{ github.repository }}:buildcache
-          cache-to: type=registry,ref=harbor.centerionware.com/${{ github.repository }}:buildcache,mode=max,image-manifest=true
+          cache-from: type=registry,ref=harbor.centerionware.com/cache/${{ github.repository }}:buildcache
+          cache-to: type=registry,ref=harbor.centerionware.com/cache/${{ github.repository }}:buildcache,mode=max,image-manifest=true
