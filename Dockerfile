@@ -13,7 +13,7 @@ WORKDIR /workspace/vllm
 RUN pip install --upgrade pip setuptools wheel packaging
 
 # Install PyTorch stack (CUDA 11.8)
-RUN pip install torch==2.7.1+cu118 torchvision xformers--extra-index-url https://download.pytorch.org/whl/cu118
+RUN pip install torch==2.7.1+cu118 torchvision xformers --index-url https://download.pytorch.org/whl/cu118
 
 # Install matching xformers
 # RUN pip install xformers==0.0.31.post1 --index-url https://download.pytorch.org/whl/cu118
