@@ -40,9 +40,11 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Copy installed site-packages & vllm binaries from builder
-COPY --from=builder /usr/local/lib/python3.10/dist-packages /usr/local/lib/python3.10/dist-packages
-COPY --from=builder /usr/local/bin /usr/local/bin
+# Copy prebuilt wheels from builder
+COPY --from=builder /root/.cache/pip/wheels /wheels
+
+# Install all wheels
+RUN pip install /wheels/*.whl --no-deps
 
 # Optional: copy vllm repo (for scripts/configs)
 COPY --from=builder /workspace/vllm /app/vllm
