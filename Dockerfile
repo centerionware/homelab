@@ -27,30 +27,6 @@ RUN pip install -r requirements/build.txt
 # Build and install vLLM from source
 RUN pip install --no-build-isolation -e .
 
-# ============================================================
-# Stage 2: Runtime Image
-# ============================================================
-FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04 AS runtime
-
-# System deps
-RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-pip \
-    && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /app
-
-# Copy prebuilt wheels from builder
-COPY --from=builder /root/.cache/pip/wheels /wheels
-
-# Install all wheels
-RUN pip install /wheels/*.whl --no-deps
-
-# Optional: copy vllm repo (for scripts/configs)
-COPY --from=builder /workspace/vllm /app/vllm
-
-# Install packaging again (needed at runtime sometimes)
-RUN pip install packaging
 
 # Default command (can be overridden in k8s deployment)
 CMD ["python3", "-m", "vllm.entrypoints.api_server"]
