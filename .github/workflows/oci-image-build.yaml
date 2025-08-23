@@ -42,9 +42,9 @@ jobs:
           use: true
           buildkitd-config-inline: |
             [registry."docker.io"]
-              mirrors = ["https://harbor.centerionware.com/"]
+              mirrors = ["https://harbor.centerionware.com/v2/dockerhub"]
             [registry."ghcr.io"]
-              mirrors = ["https://harbor.centerionware.com/"]
+              mirrors = ["https://harbor.centerionware.com/v2/github"]
       - name: Checkout repository
         uses: actions/checkout@v4
 
