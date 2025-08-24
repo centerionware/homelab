@@ -2,7 +2,7 @@ FROM python:3.13-slim AS builder
 
 
 RUN apt update && apt install -y bash git gcc linux-headers-amd64 python3-dev python3-pip python3-venv python3-pyaudio build-essential wget curl cmake ninja-build  && rm  -rf /tmp/* && apt-get clean
-RUN pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+RUN pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
 
 WORKDIR /workspace
 RUN git clone https://github.com/vllm-project/vllm.git
