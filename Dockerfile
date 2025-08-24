@@ -1,4 +1,4 @@
-FROM python:3.13-slim AS builder
+FROM nvidia/cuda:12.1.105-devel-ubuntu22.04
 
 
 RUN apt update && apt install -y bash git gcc linux-headers-amd64 python3-dev python3-pip python3-venv python3-pyaudio build-essential wget curl cmake ninja-build  && rm  -rf /tmp/* && apt-get clean
