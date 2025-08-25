@@ -5,8 +5,8 @@ metadata:
 provisioner: cephfs.csi.ceph.com
 parameters:
   # Comma-separated
-  monitors: MON1_IP:6789,MON2_IP:6789,MON3_IP:6789
-  fsName: FS_NAME                # e.g. cephfs
+  monitors: 192.168.19.5:6789,192.168.1.25:6789
+  fsName: oci-ceph-fs                # e.g. cephfs
   # Secrets for dynamic provisioning
   csi.storage.k8s.io/provisioner-secret-name: csi-cephfs-secret
   csi.storage.k8s.io/provisioner-secret-namespace: ceph-csi
