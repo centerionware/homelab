@@ -1,4 +1,4 @@
-FROM ghcr.io/centerionware/jarvis@sha256:0857d83eaac21ef59986c2f5c9d58451507976ef00cab6323cace7c6d99bb7c1 
+FROM ghcr.io/centerionware/jarvis:python3.9-cuda-torch-torchvision-pyaudio
 
 ENV DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC
 RUN apt update && apt install -y bash git gcc python3-dev python3-pip python3-venv python3-pyaudio build-essential wget curl cmake ninja-build  && rm  -rf /tmp/* && apt-get clean
