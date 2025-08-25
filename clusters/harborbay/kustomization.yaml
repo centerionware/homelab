@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - sources/helmrepositories.yaml
+  - sources/gitrepository-self.yaml
+  - infra/kustomization.yaml
+  - apps/harbor/namespace.yaml
+  - apps/harbor/helmrelease-harbor.yaml
+configMapGenerator:
+  - name: harbor-values
+    namespace: harbor
+    files:
+      - values.yaml=apps/harbor/values.yaml

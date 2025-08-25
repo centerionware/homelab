@@ -1,0 +1,50 @@
+expose:
+  type: clusterIP
+
+externalURL: https://harbor-bay.centerionware.com
+
+harborAdminPassword: CHANGE_ME_STRONG
+secretKey: CHANGE_ME_LONG_RANDOM
+
+persistence:
+  enabled: true
+  resourcePolicy: keep
+  persistentVolumeClaim:
+    registry:
+      accessMode: ReadWriteMany
+      size: 1Ti
+      storageClass: cephfs-sc
+    chartmuseum:
+      enabled: false
+    jobservice:
+      accessMode: ReadWriteMany
+      size: 10Gi
+      storageClass: cephfs-sc
+    database:
+      accessMode: ReadWriteOnce
+      size: 10Gi
+      storageClass: cephfs-sc
+    redis:
+      accessMode: ReadWriteOnce
+      size: 5Gi
+      storageClass: cephfs-sc
+    trivy:
+      accessMode: ReadWriteMany
+      size: 20Gi
+      storageClass: cephfs-sc
+
+notary:
+  enabled: false
+
+portal:
+  replicas: 1
+core:
+  replicas: 1
+jobservice:
+  replicas: 1
+registry:
+  replicas: 1
+chartmuseum:
+  enabled: false
+trivy:
+  replicas: 1

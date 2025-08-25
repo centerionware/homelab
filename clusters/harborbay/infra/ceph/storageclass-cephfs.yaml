@@ -1,0 +1,21 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: cephfs-sc
+provisioner: cephfs.csi.ceph.com
+parameters:
+  # Comma-separated
+  monitors: MON1_IP:6789,MON2_IP:6789,MON3_IP:6789
+  fsName: FS_NAME                # e.g. cephfs
+  # Secrets for dynamic provisioning
+  csi.storage.k8s.io/provisioner-secret-name: csi-cephfs-secret
+  csi.storage.k8s.io/provisioner-secret-namespace: ceph-csi
+  csi.storage.k8s.io/node-stage-secret-name: csi-cephfs-secret
+  csi.storage.k8s.io/node-stage-secret-namespace: ceph-csi
+  # Create subvolumes under this root path (optional)
+  rootPath: /k8s
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+mountOptions:
+  - mds_session_timeout=300
+  - noatime

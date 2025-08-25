@@ -1,0 +1,142 @@
+global:
+  default_entrypoints:
+    - websecure   # define your default entrypoints here
+    - web
+
+certificates:
+  - name: centerionware-default
+    secretName: centerionware-default
+    issuerRef:
+      name: letsencrypt-production
+      kind: ClusterIssuer
+    commonName: harbor-bay.centerionware.com
+    reflectionAllowedNamespaces:
+      - argocd
+      - harbor
+    createReflectedSecrets:
+      - namespace: argocd
+        secretName: argocd-server-tls
+      - namespace: harbor
+        secretName: harbor-tls
+    dnsNames:
+      - harbor-bay.centerionware.com
+
+ingressRoutes:
+  - name: harbor-centerionware-com-ingressroute
+    secretName: centerionware-default
+    routes:
+      - kind: Rule
+        priority: 2
+        match: Host(`harbor-bay.centerionware.com`) && PathPrefix(`/api/`)
+        services:
+          - type: ExternalName
+            name: harbor-core-centerionware-com-service
+            externalName: harbor-core.harbor.svc.cluster.local
+            port: 80
+            scheme: http
+        middlewares:
+          - https-enforce
+      - kind: Rule
+        priority: 2
+        match: Host(`harbor-bay.centerionware.com`) && PathPrefix(`/service/`)
+        services:
+          - type: ExternalName
+            name: harbor-core-centerionware-com-service
+            externalName: harbor-core.harbor.svc.cluster.local
+            port: 80
+            scheme: http
+        middlewares:
+          - https-enforce
+      - kind: Rule
+        priority: 2
+        match: Host(`harbor-bay.centerionware.com`) && PathPrefix(`/v2/`)
+        services:
+          - type: ExternalName
+            name: harbor-core-centerionware-com-service
+            externalName: harbor-core.harbor.svc.cluster.local
+            port: 80
+            scheme: http
+        middlewares:
+          - https-enforce
+        middlewares:
+          - replace-path-regex-harbor
+          - replace-path-regex-harbor-mirrors
+      - kind: Rule
+        priority: 2
+        match: Host(`harbor-bay.centerionware.com`) && PathPrefix( `/c/`)
+        services:
+          - type: ExternalName
+            name: harbor-core-centerionware-com-service
+            externalName: harbor-core.harbor.svc.cluster.local
+            port: 80
+            scheme: http
+        middlewares:
+          - https-enforce
+      - kind: Rule
+        priority: 2
+        match: Host(`harbor-bay.centerionware.com`) && PathPrefix( `/chartrepo/`)
+        services:
+          - type: ExternalName
+            name: harbor-core-centerionware-com-service
+            externalName: harbor-core.harbor.svc.cluster.local
+            port: 80
+            scheme: http
+        middlewares:
+          - https-enforce
+      - kind: Rule
+        priority: 2
+        match: Host(`harbor-bay.centerionware.com`) && PathPrefix( `/dockerhub/v2/`)
+        services:
+          - type: ExternalName
+            name: harbor-core-centerionware-com-service
+            externalName: harbor-core.harbor.svc.cluster.local
+            port: 80
+            scheme: http
+        middlewares:
+          - replace-path-regex-harbor-mirrors-t2
+          - https-enforce
+      - kind: Rule
+        priority: 2
+        match: Host(`harbor-bay.centerionware.com`) && PathPrefix( `/github/v2/`)
+        services:
+          - type: ExternalName
+            name: harbor-core-centerionware-com-service
+            externalName: harbor-core.harbor.svc.cluster.local
+            port: 80
+            scheme: http
+        middlewares:
+          - replace-path-regex-harbor-mirrors-t2
+          - https-enforce
+      - kind: Rule
+        match: Host(`harbor-bay.centerionware.com`)
+        services:
+          - type: ExternalName
+            name: harbor-portal-centerionware-com-service
+            externalName: harbor-portal.harbor.svc.cluster.local
+            port: 80
+            scheme: http
+        middlewares:
+          - https-enforce
+
+middlewares:
+  - name: https-enforce
+    spec:
+      redirectScheme:
+        scheme: https
+        permanent: true
+  - name: replace-path-regex-harbor
+    spec:
+      replacePathRegex:
+        regex: "^/v2/(api|service|c|chartrepo)/(.*)"
+        replacement: "/${1}/${2}"
+  - name: replace-path-regex-harbor-mirrors
+    spec:
+      replacePathRegex:
+        regex: "^/v2/([^/]*)/v2/(.*)"
+        replacement: "/v2/${1}/${2}"
+  - name: replace-path-regex-harbor-mirrors-t2
+    spec:
+      replacePathRegex:
+        regex: "^/([^/]*)/v2/(.*)"
+        replacement: "/v2/${1}/${2}"
+        

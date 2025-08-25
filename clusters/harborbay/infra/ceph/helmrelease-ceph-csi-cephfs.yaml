@@ -1,0 +1,22 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ceph-csi-cephfs
+  namespace: ceph-csi
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: ceph-csi-cephfs
+      version: 3.11.0              # pick a known-good version for your Ceph
+      sourceRef:
+        kind: HelmRepository
+        name: ceph-csi
+        namespace: flux-system
+  values:
+    nodeplugin:
+      tolerations:
+        - operator: Exists
+    provisioner:
+      replicaCount: 1              # single-node k3s
+    # You can set topology, resources, etc. as needed.
