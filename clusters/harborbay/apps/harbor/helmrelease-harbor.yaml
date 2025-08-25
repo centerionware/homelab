@@ -16,6 +16,11 @@ spec:
   values:
     expose:
       type: clusterIP
+      tls:
+        enabled: true
+        certSource: secret
+        secret:
+          secretName: harbor-tls
 
     externalURL: https://harbor-bay.centerionware.com
 

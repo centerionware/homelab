@@ -27,11 +27,8 @@ spec:
           kind: ClusterIssuer
         commonName: harbor-bay.centerionware.com
         reflectionAllowedNamespaces:
-          - argocd
           - harbor
         createReflectedSecrets:
-          - namespace: argocd
-            secretName: argocd-server-tls
           - namespace: harbor
             secretName: harbor-tls
         dnsNames:
