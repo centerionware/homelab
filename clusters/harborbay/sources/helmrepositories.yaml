@@ -54,4 +54,4 @@ spec:
   interval: 24h
   url: https://emberstack.github.io/helm-charts
   ref:
-    tag: v9.1.25
+    branch: v9.1.25
