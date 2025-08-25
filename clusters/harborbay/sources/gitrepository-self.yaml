@@ -7,4 +7,4 @@ spec:
   interval: 1m
   url: https://github.com/centerionware/homelab.git
   ref:
-    branch: main
+    branch: harborbay
