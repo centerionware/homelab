@@ -11,3 +11,7 @@ configMapGenerator:
     namespace: harbor
     files:
       - values.yaml=apps/harbor/values.yaml
+  - name: external-urls-values
+    namespace: harbor
+    files:
+      - values.yaml=infra/external-urls/values.yaml
