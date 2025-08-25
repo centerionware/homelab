@@ -14,6 +14,5 @@ spec:
         name: harbor-charts
         namespace: flux-system
   valuesFrom:
-    - kind: ConfigMap
-      name: harbor-values
-      valuesKey: values.yaml
+    - kind: File
+      path: ./clusters/harborbay/apps/harbor/values.yaml
