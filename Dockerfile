@@ -1,6 +1,6 @@
 FROM nvidia/cuda:12.1.1-devel-ubuntu20.04
 
-
+ENV DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC
 RUN apt update && apt install -y bash git gcc python3-dev python3-pip python3-venv python3-pyaudio build-essential wget curl cmake ninja-build  && rm  -rf /tmp/* && apt-get clean
 RUN pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
 
