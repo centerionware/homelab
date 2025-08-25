@@ -3,6 +3,13 @@ kind: Kustomization
 resources:
   - sources/helmrepositories.yaml
   - sources/gitrepository-self.yaml
-  - infra/kustomization.yaml
+  - infra/ceph/namespace.yaml
+  - infra/ceph/helmrelease-ceph-csi-cephfs.yaml
+  - infra/ceph/storageclass-cephfs.yaml
+  - infra/cert-manager/namespace.yaml
+  - infra/cert-manager/helmrelease-cert-manager.yaml
+  - infra/reflector/helmrelease-reflector.yaml
+  - infra/traefik/namespace.yaml
+  - infra/traefik/helmrelease-traefik.yaml
   - apps/harbor/namespace.yaml
   - apps/harbor/helmrelease-harbor.yaml
