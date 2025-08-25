@@ -8,12 +8,15 @@ parameters:
   monitors: 192.168.19.5:6789,192.168.1.25:6789
   fsName: oci-ceph-fs                # e.g. cephfs
   # Secrets for dynamic provisioning
-  csi.storage.k8s.io/provisioner-secret-name: csi-cephfs-secret
-  csi.storage.k8s.io/provisioner-secret-namespace: ceph-csi
+  clusterID: 05a788b5-4c3d-4f18-93f8-4915ecaebfc4
+  csi.storage.k8s.io/controller-expand-secret-name: csi-cephfs-secret
+  csi.storage.k8s.io/controller-expand-secret-namespace: ceph-csi
   csi.storage.k8s.io/node-stage-secret-name: csi-cephfs-secret
   csi.storage.k8s.io/node-stage-secret-namespace: ceph-csi
+  csi.storage.k8s.io/provisioner-secret-name: csi-cephfs-secret
+  csi.storage.k8s.io/provisioner-secret-namespace: ceph-csi
   # Create subvolumes under this root path (optional)
-  rootPath: /k8s
+  rootPath: /k3s-harborbay
 reclaimPolicy: Retain
 allowVolumeExpansion: true
 mountOptions:
