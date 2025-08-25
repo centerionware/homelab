@@ -43,10 +43,10 @@ spec:
   interval: 1h
   url: https://github.com/centerionware/external_services
   ref:
-    branch: main
+    branch: harborbay
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
+kind: GitRepository
 metadata:
   name: emberstack
   namespace: flux-system
