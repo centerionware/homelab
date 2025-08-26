@@ -5,7 +5,6 @@ resources:
   - sources/gitrepository-self.yaml
   - infra/ceph/namespace.yaml
   - infra/ceph/helmrelease-ceph-csi-cephfs.yaml
-  - infra/ceph/storageclass-cephfs.yaml
   - infra/cert-manager/namespace.yaml
   - infra/cert-manager/helmrelease-cert-manager.yaml
   - infra/reflector/helmrelease-reflector.yaml
