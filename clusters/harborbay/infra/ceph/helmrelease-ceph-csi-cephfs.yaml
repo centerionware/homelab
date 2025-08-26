@@ -115,7 +115,7 @@ spec:
           repository: registry.k8s.io/sig-storage/csi-provisioner
           tag: v5.0.1
         resources: {}
-      replicaCount: 3
+      replicaCount: 1
       resizer:
         args: null
         enabled: true
