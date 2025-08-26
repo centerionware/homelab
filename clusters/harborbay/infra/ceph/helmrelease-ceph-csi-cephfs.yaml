@@ -8,15 +8,180 @@ spec:
   chart:
     spec:
       chart: ceph-csi-cephfs
-      version: 3.11.0              # pick a known-good version for your Ceph
+      version: 3.15.0              # pick a known-good version for your Ceph
       sourceRef:
         kind: HelmRepository
         name: ceph-csi
         namespace: flux-system
   values:
+    CSIDriver:
+      fsGroupPolicy: File
+      seLinuxMount: true
+    cephConfConfigMapName: fs-ceph-config
+    cephconf: |
+      [global]
+        auth_cluster_required = cephx
+        auth_service_required = cephx
+        auth_client_required = cephx
+
+        # ceph-fuse which uses libfuse2 by default has write buffer size of 2KiB
+        # adding 'fuse_big_writes = true' option by default to override this limit
+        # see https://github.com/ceph/ceph-csi/issues/1928
+        fuse_big_writes = true
+    commonLabels: {}
+    configMapName: fs-ceph-csi-config
+    csiConfig:
+      - clusterID: 05a788b5-4c3d-4f18-93f8-4915ecaebfc4
+        monitors:
+          - 192.168.19.5:6789
+          - 192.168.1.25:6789
+    driverName: cephfs.csi.ceph.com
+    encryptionKMSConfig: {}
+    externallyManagedConfigmap: false
+    extraDeploy: []
+    kmsConfigMapName: fs-ceph-csi-encryption-kms-config
+    kubeletDir: /var/lib/kubelet
+    logLevel: 5
+    logSlowOperationInterval: 30s
     nodeplugin:
-      tolerations:
-        - operator: Exists
+      affinity: {}
+      annotations: {}
+      fusemountoptions: ''
+      httpMetrics:
+        containerPort: 8082
+        enabled: true
+        service:
+          annotations: {}
+          clusterIP: ''
+          enabled: true
+          externalIPs: []
+          loadBalancerIP: ''
+          loadBalancerSourceRanges: []
+          servicePort: 8080
+          type: ClusterIP
+      imagePullSecrets: []
+      kernelmountoptions: ''
+      name: nodeplugin
+      nodeSelector: {}
+      plugin:
+        image:
+          pullPolicy: IfNotPresent
+          repository: quay.io/cephcsi/cephcsi
+          tag: v3.13.0
+        resources: {}
+      podAnnotations: {}
+      podSecurityContext: {}
+      priorityClassName: system-node-critical
+      profiling:
+        enabled: false
+      registrar:
+        image:
+          pullPolicy: IfNotPresent
+          repository: registry.k8s.io/sig-storage/csi-node-driver-registrar
+          tag: v2.11.1
+        resources: {}
+      tolerations: []
+      updateStrategy: RollingUpdate
+    pluginSocketFile: csi.sock
     provisioner:
-      replicaCount: 1              # single-node k3s
-    # You can set topology, resources, etc. as needed.
+      affinity: {}
+      annotations: {}
+      enableHostNetwork: false
+      httpMetrics:
+        containerPort: 8082
+        enabled: true
+        service:
+          annotations: {}
+          clusterIP: ''
+          enabled: true
+          externalIPs: []
+          loadBalancerIP: ''
+          loadBalancerSourceRanges: []
+          servicePort: 8080
+          type: ClusterIP
+      imagePullSecrets: []
+      name: provisioner
+      nodeSelector: {}
+      podAnnotations: {}
+      podSecurityContext: {}
+      priorityClassName: system-cluster-critical
+      profiling:
+        enabled: false
+      provisioner:
+        args: null
+        extraArgs: []
+        image:
+          pullPolicy: IfNotPresent
+          repository: registry.k8s.io/sig-storage/csi-provisioner
+          tag: v5.0.1
+        resources: {}
+      replicaCount: 3
+      resizer:
+        args: null
+        enabled: true
+        extraArgs: []
+        image:
+          pullPolicy: IfNotPresent
+          repository: registry.k8s.io/sig-storage/csi-resizer
+          tag: v1.11.1
+        name: resizer
+        resources: {}
+      setmetadata: true
+      snapshotter:
+        args:
+          enableVolumeGroupSnapshots: true
+        extraArgs: []
+        image:
+          pullPolicy: IfNotPresent
+          repository: registry.k8s.io/sig-storage/csi-snapshotter
+          tag: v8.0.1
+        resources: {}
+      strategy:
+        rollingUpdate:
+          maxUnavailable: 50%
+        type: RollingUpdate
+      timeout: 60s
+      tolerations: []
+    provisionerSocketFile: csi-provisioner.sock
+    rbac:
+      create: true
+      leastPrivileges: true
+    secret:
+      adminID: csi-cephfs
+      adminKey: ..
+      annotations: {}
+      create: false
+      name: csi-cephfs-secret
+      userID: kubernetes
+      userKey: ..
+    selinuxMount: false
+    serviceAccounts:
+      nodeplugin:
+        create: true
+        name: null
+      provisioner:
+        create: true
+        name: null
+    sidecarLogLevel: 1
+    storageClass:
+      allowVolumeExpansion: true
+      annotations: {}
+      clusterID: 05a788b5-4c3d-4f18-93f8-4915ecaebfc4
+      controllerExpandSecret: csi-cephfs-secret
+      controllerExpandSecretNamespace: ''
+      create: true
+      encrypted: ''
+      encryptionKMSID: ''
+      fsName: oci-ceph-fs
+      fuseMountOptions: ''
+      kernelMountOptions: ''
+      mountOptions: []
+      mounter: ''
+      name: csi-cephfs-sc
+      nodeStageSecret: csi-cephfs-secret
+      nodeStageSecretNamespace: ''
+      pool: ''
+      provisionerSecret: csi-cephfs-secret
+      provisionerSecretNamespace: ''
+      reclaimPolicy: Delete
+      volumeNamePrefix: ''
