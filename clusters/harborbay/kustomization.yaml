@@ -12,3 +12,4 @@ resources:
   - infra/traefik/helmrelease-traefik.yaml
   - apps/harbor/namespace.yaml
   - apps/harbor/helmrelease-harbor.yaml
+  - apps/harbor/helmrelease-harbor-ingress.yaml

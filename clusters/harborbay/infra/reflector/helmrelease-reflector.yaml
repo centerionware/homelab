@@ -7,13 +7,12 @@ spec:
   interval: 5m
   chart:
     spec:
-      chart: kubernetes-reflector
-      version: v9.1.25
+      chart: src/helm/reflector
       sourceRef:
         kind: GitRepository
         name: emberstack
         namespace: flux-system
   values:
     replicaCount: 1
-    img:
+    image:
       tag: 9.1.25

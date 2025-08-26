@@ -18,7 +18,6 @@ spec:
       default_entrypoints:
         - websecure
         - web
-
     certificates:
       - name: centerionware-default
         secretName: centerionware-default
