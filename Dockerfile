@@ -2,6 +2,9 @@ FROM nvidia/cuda:12.1.1-devel-ubuntu22.04
 ENV CUDA_HOME=/usr/local/cuda-12.1
 ENV DEBIAN_FRONTEND=noninteractive 
 ENV TZ=Etc/UTC
+ENV PATH=$CUDA_HOME/bin:$PATH
+ENV LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
+
 RUN apt update && apt install -y bash git gcc python3-dev python3-pip python3-venv python3-pyaudio build-essential wget curl cmake ninja-build  && rm  -rf /tmp/* && apt-get clean
 RUN pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
 
