@@ -43,7 +43,7 @@ spec:
   interval: 1h
   url: https://github.com/centerionware/external_services.git
   ref:
-    branch: harborbay
+    branch: main
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
