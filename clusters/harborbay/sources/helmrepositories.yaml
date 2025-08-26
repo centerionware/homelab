@@ -41,7 +41,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1h
-  url: https://github.com/centerionware/external_services
+  url: https://github.com/centerionware/external_services.git
   ref:
     branch: harborbay
 ---
