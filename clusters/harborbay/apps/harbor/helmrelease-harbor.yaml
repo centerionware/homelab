@@ -34,25 +34,25 @@ spec:
         registry:
           accessMode: ReadWriteMany
           size: 1Ti
-          storageClass: cephfs-sc
+          storageClass: csi-cephfs-sc
         chartmuseum:
           enabled: false
         jobservice:
           accessMode: ReadWriteMany
           size: 10Gi
-          storageClass: cephfs-sc
+          storageClass: csi-cephfs-sc
         database:
           accessMode: ReadWriteOnce
           size: 10Gi
-          storageClass: cephfs-sc
+          storageClass: csi-cephfs-sc
         redis:
           accessMode: ReadWriteOnce
           size: 5Gi
-          storageClass: cephfs-sc
+          storageClass: csi-cephfs-sc
         trivy:
           accessMode: ReadWriteMany
           size: 20Gi
-          storageClass: cephfs-sc
+          storageClass: csi-cephfs-sc
 
     notary:
       enabled: false
