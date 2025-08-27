@@ -6,7 +6,7 @@ ENV PATH=$CUDA_HOME/bin:$PATH
 ENV LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
 
 RUN apt update && apt install -y bash git gcc python3-dev python3-pip python3-venv python3-pyaudio build-essential wget curl cmake ninja-build  && rm  -rf /tmp/* && apt-get clean
-RUN pip install torch=2.8.0 torchvision --index-url https://download.pytorch.org/whl/cu121
+RUN pip install torch==2.8.0 torchvision --index-url https://download.pytorch.org/whl/cu121
 
 WORKDIR /workspace
 RUN git clone https://github.com/vllm-project/vllm.git
