@@ -15,7 +15,7 @@ jobs:
     
     outputs:
       image-uri: ghcr.io/${{ github.repository }}@${{ steps.build-and-push.outputs.digest }}
-    
+    timeout: 48h
     steps:
       # Log in to GHCR for final push
       - name: Log in to GHCR
