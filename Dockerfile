@@ -9,7 +9,6 @@ RUN apt update && apt install -y bash git gcc python3-dev python3-pip python3-ve
 RUN apt-get update && apt-get install -y \
     software-properties-common \
     libopenblas-dev libblas-dev libeigen3-dev \
-    libnccl2 libnccl-dev \
     libssl-dev zlib1g-dev \
     python3-setuptools python3-wheel \
     && rm -rf /var/lib/apt/lists/*
