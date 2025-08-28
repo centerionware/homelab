@@ -28,27 +28,28 @@ ENV CMAKE_PREFIX_PATH="$(dirname $(which python3))/../" \
     MAX_JOBS=8
 
 RUN python3 setup.py install
-
-# Run a quick test so can tell at build time if it's at all working. I don't expect cuda.is_available() to be available unless running on a runner with it setup.
-# My current Kubernetes build environment doesn't change the default runtime class so no matter what as is on my cluster it won't have gpu access while building.
-RUN python3 -c "import torch; print(torch.__version__); print(torch.cuda.is_available()); print(torch.version.cuda)"
-
-# RUN pip install torch==2.8.0 torchvision --index-url https://download.pytorch.org/whl/cu121
 WORKDIR /workspace
-RUN git clone https://github.com/vllm-project/vllm.git
-WORKDIR /workspace/vllm
 
-# Upgrade pip & basics
-# RUN pip install --upgrade pip setuptools wheel packaging
+# # Run a quick test so can tell at build time if it's at all working. I don't expect cuda.is_available() to be available unless running on a runner with it setup.
+# # My current Kubernetes build environment doesn't change the default runtime class so no matter what as is on my cluster it won't have gpu access while building.
+# RUN python3 -c "import torch; print(torch.__version__); print(torch.cuda.is_available()); print(torch.version.cuda)"
 
-# Tell vLLM to clean requirements to use our installed torch
-RUN python3 use_existing_torch.py
+# # RUN pip install torch==2.8.0 torchvision --index-url https://download.pytorch.org/whl/cu121
+# WORKDIR /workspace
+# RUN git clone https://github.com/vllm-project/vllm.git
+# WORKDIR /workspace/vllm
 
-# Install build requirements
-RUN pip install -r requirements/build.txt
+# # Upgrade pip & basics
+# # RUN pip install --upgrade pip setuptools wheel packaging
 
-# Build and install vLLM from source
-RUN pip install --no-build-isolation -e .
+# # Tell vLLM to clean requirements to use our installed torch
+# RUN python3 use_existing_torch.py
 
-# Default command (can be overridden in k8s deployment)
-CMD ["python3", "-m", "vllm.entrypoints.api_server"]
+# # Install build requirements
+# RUN pip install -r requirements/build.txt
+
+# # Build and install vLLM from source
+# RUN pip install --no-build-isolation -e .
+
+# # Default command (can be overridden in k8s deployment)
+# CMD ["python3", "-m", "vllm.entrypoints.api_server"]

@@ -39,6 +39,7 @@ jobs:
           driver: kubernetes
           driver-opts: |
             namespace=buildkit
+            nodeselector=builder=true
           use: true
           buildkitd-config-inline: |
             [registry."docker.io"]
