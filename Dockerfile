@@ -15,7 +15,7 @@ WORKDIR /workspace/vllm
 RUN python3 use_existing_torch.py
 
 # Install build requirements
-RUN pip install -r requirements/build.txt
+RUN pip install -r requirements/build.txt && pip install --upgrade transformers
 
 # Build and install vLLM from source
 RUN pip install --no-build-isolation -e .
