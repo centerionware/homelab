@@ -1,5 +1,5 @@
-FROM nvidia/cuda:12.2.2-devel-ubuntu22.04
-ENV CUDA_HOME=/usr/local/cuda-12.2
+FROM nvidia/cuda:12.8.1-devel-ubuntu22.04
+ENV CUDA_HOME=/usr/local/cuda-12.8
 ENV DEBIAN_FRONTEND=noninteractive 
 ENV TZ=Etc/UTC
 ENV PATH=$CUDA_HOME/bin:$PATH
