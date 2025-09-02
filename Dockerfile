@@ -8,7 +8,8 @@ WORKDIR /workspace
 RUN git clone https://github.com/vllm-project/vllm.git
 WORKDIR /workspace/vllm
 RUN git checkout v0.10.1.1
-# ENV TORCH_CUDA_ARCH_LIST="6.0 6.1 7.0 7.5 8.0 8.6 8.9 9.0+PTX 12.0"
+ENV TORCH_CUDA_ARCH_LIST="6.0 6.1 7.0 7.5 8.0 8.6 8.9 9.0+PTX 12.0"
+RUN pip install ninja && pip install -v --no-build-isolation -U git+https://github.com/facebookresearch/xformers.git@main#egg=xformers
 # Upgrade pip & basics
 # RUN pip install --upgrade pip setuptools wheel packaging
 
