@@ -7,7 +7,7 @@ FROM ghcr.io/centerionware/homelab:cuda-122-pytorch-280-py310-devel
 WORKDIR /workspace
 RUN git clone https://github.com/vllm-project/vllm.git
 WORKDIR /workspace/vllm
-ENV TORCH_CUDA_ARCH_LIST="6.0 6.1 7.0 7.5 8.0 8.6 8.9 9.0+PTX 12.0"
+# ENV TORCH_CUDA_ARCH_LIST="6.0 6.1 7.0 7.5 8.0 8.6 8.9 9.0+PTX 12.0"
 # Upgrade pip & basics
 # RUN pip install --upgrade pip setuptools wheel packaging
 
