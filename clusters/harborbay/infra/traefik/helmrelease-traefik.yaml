@@ -391,9 +391,9 @@ spec:
             graceTimeOut: null
             requestAcceptGraceTimeout: null
           respondingTimeouts:
-            idleTimeout: null
-            readTimeout: null
-            writeTimeout: null
+            idleTimeout: 0s
+            readTimeout: 0s
+            writeTimeout: 0s
       websecure:
         allowACMEByPass: false
         appProtocol: null
@@ -428,9 +428,9 @@ spec:
             graceTimeOut: null
             requestAcceptGraceTimeout: null
           respondingTimeouts:
-            idleTimeout: null
-            readTimeout: null
-            writeTimeout: null
+            idleTimeout: 0s
+            readTimeout: 0s
+            writeTimeout: 0s
     priorityClassName: ''
     providers:
       file:
