@@ -1,4 +1,4 @@
-FROM ghcr.io/centerionware/homelab:cuda-122-pytorch-280-py310-devel
+FROM pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel
 # Run a quick test so can tell at build time if it's at all working. I don't expect cuda.is_available() to be available unless running on a runner with it setup.
 # My current Kubernetes build environment doesn't change the default runtime class so no matter what as is on my cluster it won't have gpu access while building.
 # RUN python3 -c "import torch; print(torch.__version__); print(torch.cuda.is_available()); print(torch.version.cuda)"
@@ -9,7 +9,8 @@ RUN git clone https://github.com/vllm-project/vllm.git
 WORKDIR /workspace/vllm
 RUN git checkout v0.10.1.1
 ENV TORCH_CUDA_ARCH_LIST="6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX;12.0"
-RUN pip install ninja && pip install -v --no-build-isolation -U --no-deps git+https://github.com/facebookresearch/xformers.git@main#egg=xformers
+RUN pip install ninja 
+# && pip install -v --no-build-isolation -U --no-deps git+https://github.com/facebookresearch/xformers.git@main#egg=xformers
 # Upgrade pip & basics
 # RUN pip install --upgrade pip setuptools wheel packaging
 
