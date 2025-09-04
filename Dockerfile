@@ -5,7 +5,7 @@ FROM pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel
 
 # RUN pip install torch==2.8.0 torchvision --index-url https://download.pytorch.org/whl/cu121
 WORKDIR /workspace
-RUN apt update && apt install git && git clone https://github.com/vllm-project/vllm.git
+RUN apt update && apt install git -y && git clone https://github.com/vllm-project/vllm.git
 WORKDIR /workspace/vllm
 RUN git checkout v0.10.1.1
 ENV TORCH_CUDA_ARCH_LIST="6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX;12.0"
