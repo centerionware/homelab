@@ -18,7 +18,7 @@ RUN pip install ninja
 RUN python3 use_existing_torch.py
 
 # Install build requirements
-RUN pip install -r requirements/build.txt && pip install --upgrade transformers && sed -i 's/< 7/< 6/g' /usr/local/lib/python3.10/dist-packages/torch/_inductor/scheduler.py && sed -i 's/7.0;/6.0;6.1;7.0;/g' /workspace/vllm/CMakeLists.txt
+RUN pip install -r requirements/build.txt && pip install --upgrade transformers && sed -i 's/< 7/< 6/g' /opt/conda/lib/python3.11/site-packages/torch/_inductor/scheduler.py && sed -i 's/7.0;/6.0;6.1;7.0;/g' /workspace/vllm/CMakeLists.txt
 
 # Build and install vLLM from source
 RUN pip install --no-build-isolation -e .
